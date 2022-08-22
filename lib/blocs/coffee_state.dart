@@ -15,7 +15,7 @@ class CoffeeState extends Equatable {
 
   CoffeeState copyWith({
     CoffeeStatus Function()? status,
-    Coffee Function()? randomCoffee,
+    Coffee? Function()? randomCoffee,
     List<Coffee> Function()? favorites,
   }) {
     return CoffeeState(

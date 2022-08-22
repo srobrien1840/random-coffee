@@ -7,18 +7,18 @@ part 'coffee_event.dart';
 part 'coffee_state.dart';
 
 class CoffeeBloc extends HydratedBloc<CoffeeEvent, CoffeeState> {
-  CoffeeBloc() : super(const CoffeeState()) {
+  CoffeeBloc({required this.coffeeApiClient}) : super(const CoffeeState()) {
     on<RandomCoffeeRequested>(_onRandomCoffeeRequested);
     on<AddCoffeeToFavoritesRequested>(_onAddFavoriteRequested);
     on<RemoveCoffeeFromFavoritesRequested>(_onRemoveFavoriteRequested);
   }
-  final CoffeeApiClient _coffeeApiClient = CoffeeApiClient();
+  final CoffeeApiClient coffeeApiClient;
 
   Future<void> _onRandomCoffeeRequested(
       RandomCoffeeRequested event, Emitter<CoffeeState> emit) async {
     emit(state.copyWith(status: () => CoffeeStatus.loading));
     try {
-      Coffee randomCoffee = await _coffeeApiClient.getRandomCoffee();
+      Coffee randomCoffee = await coffeeApiClient.getRandomCoffee();
       emit(state.copyWith(
           status: () => CoffeeStatus.success,
           randomCoffee: () => randomCoffee));
@@ -40,8 +40,11 @@ class CoffeeBloc extends HydratedBloc<CoffeeEvent, CoffeeState> {
       RemoveCoffeeFromFavoritesRequested event,
       Emitter<CoffeeState> emit) async {
     Coffee coffee = event.coffee.copyWith(favorite: false);
-    state.favorites.remove(event.coffee);
-    emit(state.copyWith(randomCoffee: (() => coffee)));
+    List<Coffee> favorites = [];
+    favorites.addAll([...state.favorites]);
+    favorites.remove(event.coffee);
+    emit(state.copyWith(
+        randomCoffee: (() => coffee), favorites: (() => favorites)));
   }
 
   @override

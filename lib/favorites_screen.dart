@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:random_coffee/blocs/coffee_bloc.dart';
 import 'package:random_coffee/widgets/coffee_image.dart';

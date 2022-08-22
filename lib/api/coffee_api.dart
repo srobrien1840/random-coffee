@@ -6,6 +6,8 @@ import 'package:random_coffee/models/coffee.dart';
 
 class RandomCoffeeRequestFailure implements Exception {}
 
+class MissingImageFailure implements Exception {}
+
 class CoffeeApiClient {
   CoffeeApiClient({http.Client? httpClient})
       : _httpClient = httpClient ?? http.Client();
@@ -27,6 +29,10 @@ class CoffeeApiClient {
     final randomCoffeeJson = jsonDecode(
       randomCoffeeResponse.body,
     );
+
+    if (randomCoffeeJson['file'] == null) {
+      throw MissingImageFailure();
+    }
 
     return Coffee.fromJson(randomCoffeeJson as Map<String, dynamic>);
   }

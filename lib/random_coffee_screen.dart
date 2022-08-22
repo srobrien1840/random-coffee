@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:random_coffee/api/coffee_api.dart';
 import 'package:random_coffee/blocs/coffee_bloc.dart';
 import 'package:random_coffee/favorites_screen.dart';
 import 'package:random_coffee/widgets/coffee_image.dart';
@@ -10,8 +11,10 @@ class RandomCoffeeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CoffeeApiClient coffeeApiClient = CoffeeApiClient();
     return BlocProvider(
-      create: (context) => CoffeeBloc()..add(const RandomCoffeeRequested()),
+      create: (context) => CoffeeBloc(coffeeApiClient: coffeeApiClient)
+        ..add(const RandomCoffeeRequested()),
       child: const RandomCoffeeView(),
     );
   }
